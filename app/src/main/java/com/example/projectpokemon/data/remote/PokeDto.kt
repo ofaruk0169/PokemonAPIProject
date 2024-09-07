@@ -7,5 +7,4 @@ data class PokeDto(
     val abilities: String, //"description" in Phillip video
     val height: String, //"first_brewed" in Phillip video
     val sprite_url: String? //"image_url" in Phillip video
-
 )
