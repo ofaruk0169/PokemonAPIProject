@@ -1,6 +1,6 @@
-package com.example.projectpokemon.data.remote
+package com.example.projectpokemon.data.local
 
-data class PokeDto(
+data class PokeEntity(
     val id: Int,
     val name: String,
     val types: String, //"tagline" in Phillip video

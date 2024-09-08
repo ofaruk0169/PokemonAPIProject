@@ -1,6 +1,6 @@
-package com.example.projectpokemon.data.remote
+package com.example.projectpokemon.domain
 
-data class PokeDto(
+data class Pokemon(
     val id: Int,
     val name: String,
     val types: String, //"tagline" in Phillip video
