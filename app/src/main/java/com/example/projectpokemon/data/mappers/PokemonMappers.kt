@@ -1,11 +1,11 @@
 package com.example.projectpokemon.data.mappers
 
-import com.example.projectpokemon.data.local.PokeEntity
-import com.example.projectpokemon.data.remote.PokeDto
+import com.example.projectpokemon.data.local.PokemonEntity
+import com.example.projectpokemon.data.remote.PokemonDto
 import com.example.projectpokemon.domain.Pokemon
 
-fun PokeDto.toPokeEntity(): PokeEntity {
-    return PokeEntity(
+fun PokemonDto.toPokemonEntity(): PokemonEntity {
+    return PokemonEntity(
         id = id,
         name = name,
         types = types,
@@ -15,7 +15,7 @@ fun PokeDto.toPokeEntity(): PokeEntity {
     )
 }
 
-fun PokeEntity.toPoke(): Pokemon {
+fun PokemonEntity.toPokemon(): Pokemon {
     return Pokemon(
         id = id,
         name = name,
