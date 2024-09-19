@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,9 @@ fun PokemonItem(
 ) {
     Card(
         modifier = modifier,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        ),
     ) {
         Row(
             modifier = Modifier
@@ -57,6 +61,7 @@ fun PokemonItem(
                     color = Color.LightGray,
                     modifier = Modifier.fillMaxWidth()
                 )
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
