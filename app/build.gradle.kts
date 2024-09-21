@@ -15,6 +15,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -54,6 +55,7 @@ android {
 
 dependencies {
 
+    // do something here implementation 'androidx.multidex:multidex:2.0.1'
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -72,12 +74,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-// Dagger - Hilt
-    val hiltVersion = "2.42"
+    // Dagger - Hilt
+    val hiltVersion = "2.48"
 
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     ksp("com.google.dagger:hilt-android-compiler:$hiltVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
 // For instrumentation tests
     androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
     kspAndroidTest("com.google.dagger:hilt-compiler:$hiltVersion")

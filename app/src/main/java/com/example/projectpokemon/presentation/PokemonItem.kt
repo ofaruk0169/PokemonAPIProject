@@ -1,6 +1,8 @@
 package com.example.projectpokemon.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.projectpokemon.domain.Pokemon
 import com.example.projectpokemon.ui.theme.ProjectPokemonTheme
@@ -35,6 +39,7 @@ fun PokemonItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(IntrinsicSize.Max)
                 .padding(16.dp)
         ) {
             AsyncImage(
@@ -47,7 +52,8 @@ fun PokemonItem(
             Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier
-                    .weight(3f)
+                    .weight(3f),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = pokemon.name,
@@ -62,9 +68,24 @@ fun PokemonItem(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = pokemon.abilities,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = pokemon.height,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.End,
+                    fontSize = 8.sp
+                )
             }
         }
     }
+
+
+
+
 }
 
 @Preview

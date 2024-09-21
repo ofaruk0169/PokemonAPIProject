@@ -9,6 +9,7 @@ import coil.network.HttpException
 import com.example.projectpokemon.data.local.PokemonDatabase
 import com.example.projectpokemon.data.local.PokemonEntity
 import com.example.projectpokemon.data.mappers.toPokemonEntity
+import kotlinx.coroutines.delay
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
@@ -37,6 +38,7 @@ class PokemonRemoteMediator (
                 }
             }
 
+            delay(2000L)
             val pokemons = pokemonApi.getPokemons(
                 page = loadKey,
                 pageCount = state.config.pageSize
