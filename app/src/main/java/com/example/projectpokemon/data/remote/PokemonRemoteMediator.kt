@@ -22,6 +22,7 @@ class PokemonRemoteMediator (
         loadType: LoadType,
         state: PagingState<Int, PokemonEntity>
     ): MediatorResult {
+
         return try {
             val loadKey = when(loadType) {
                 LoadType.REFRESH -> 1
