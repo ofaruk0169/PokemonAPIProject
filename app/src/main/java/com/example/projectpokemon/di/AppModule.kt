@@ -40,7 +40,7 @@ object AppModule {
             .baseUrl(PokemonApi.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
-            .create()
+            .create(PokemonApi::class.java)
     }
 
     @OptIn(ExperimentalPagingApi::class)

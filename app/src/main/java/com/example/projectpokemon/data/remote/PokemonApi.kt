@@ -7,7 +7,6 @@ interface PokemonApi {
     @GET("pokemon")
     suspend fun getPokemons(
         @Query("page") page: Int,
-        //API needs to support pagination 
         @Query("per_page") pageCount: Int
     ): List<PokemonDto>
 
