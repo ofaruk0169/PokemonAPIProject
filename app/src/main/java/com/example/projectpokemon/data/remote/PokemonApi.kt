@@ -2,6 +2,7 @@ package com.example.projectpokemon.data.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface PokemonApi {
     @GET("pokemon")
@@ -11,6 +12,9 @@ interface PokemonApi {
     ): PokemonResponse
 
     companion object {
-        const val BASE_URL = "https://pokeapi.co/api/v2/"
+        const val BASE_URL = "https://pokeapi.co/api/v2/pokemons"
     }
+
+    @GET
+    suspend fun getPokemonDetails(@Url url: String): PokemonDto
 }

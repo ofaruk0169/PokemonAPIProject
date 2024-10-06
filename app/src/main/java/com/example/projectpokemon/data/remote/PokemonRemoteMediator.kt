@@ -23,7 +23,6 @@ class PokemonRemoteMediator (
         loadType: LoadType,
         state: PagingState<Int, PokemonEntity>
     ): MediatorResult {
-
         return try {
             // Calculate offset based on load type
             val offset = when (loadType) {
@@ -46,29 +45,37 @@ class PokemonRemoteMediator (
 
             //Make the API call with offset and limit
             delay(2000L)
-            val pokemons = pokemonApi.getPokemons(
+            val pokemonsListResponse = pokemonApi.getPokemons(
                 offset = offset,
                 limit = state.config.pageSize
             ).results
 
+
+            // Fetch detailed data for each Pokémon using the URL from the list response
+            val detailedPokemonList = pokemonsListResponse.map { basicPokemonDto ->
+                val pokemonDetailDto = pokemonApi.getPokemonDetails(basicPokemonDto.url)
+                pokemonDetailDto
+            }
+
             // Log the Pokémon DTOs to see if any fields are null
-            pokemons.forEach { pokemonDto ->
+            detailedPokemonList.forEach { pokemonDetailDto ->
                 Log.d(
-                    "PokemonDto",
-                    "ID: ${pokemonDto.id}, Name: ${pokemonDto.name}, Types: ${pokemonDto.types}, Abilities: ${pokemonDto.abilities}, Height: ${pokemonDto.height}, Sprite URL: ${pokemonDto.spriteUrl}"
+                    "PokemonDetailDto",
+                    "Name: ${pokemonDetailDto.name}}"
                 )
             }
 
+
             pokemonDb.withTransaction {
-                if(loadType == LoadType.REFRESH) {
+                if (loadType == LoadType.REFRESH) {
                     pokemonDb.dao.clearAll()
                 }
-                val pokemonEntities = pokemons.map { it.toPokemonEntity() }
+                val pokemonEntities = detailedPokemonList.map { it.toPokemonEntity() }
                 pokemonDb.dao.upsertAll(pokemonEntities)
             }
 
             MediatorResult.Success(
-                endOfPaginationReached = pokemons.isEmpty()
+                endOfPaginationReached = pokemonsListResponse.isEmpty()
             )
 
         } catch(e: IOException) {
