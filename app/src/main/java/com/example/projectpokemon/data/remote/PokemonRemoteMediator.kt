@@ -1,5 +1,6 @@
 package com.example.projectpokemon.data.remote
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -24,26 +25,39 @@ class PokemonRemoteMediator (
     ): MediatorResult {
 
         return try {
-            val loadKey = when(loadType) {
-                LoadType.REFRESH -> 1
+            // Calculate offset based on load type
+            val offset = when (loadType) {
+                LoadType.REFRESH -> 0 // Start from the beginning for a refresh
                 LoadType.PREPEND -> return MediatorResult.Success(
                     endOfPaginationReached = true
                 )
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull()
-                    if(lastItem == null) {
-                        1
+                    if (lastItem == null) {
+                        // If no last item, start from the beginning
+                        0
                     } else {
-                        (lastItem.id / state.config.pageSize) + 1
+                        // Calculate the offset from the last item's ID
+                        lastItem.id
                     }
                 }
             }
 
+
+            //Make the API call with offset and limit
             delay(2000L)
             val pokemons = pokemonApi.getPokemons(
-                page = loadKey,
-                pageCount = state.config.pageSize
-            )
+                offset = offset,
+                limit = state.config.pageSize
+            ).results
+
+            // Log the Pokémon DTOs to see if any fields are null
+            pokemons.forEach { pokemonDto ->
+                Log.d(
+                    "PokemonDto",
+                    "ID: ${pokemonDto.id}, Name: ${pokemonDto.name}, Types: ${pokemonDto.types}, Abilities: ${pokemonDto.abilities}, Height: ${pokemonDto.height}, Sprite URL: ${pokemonDto.spriteUrl}"
+                )
+            }
 
             pokemonDb.withTransaction {
                 if(loadType == LoadType.REFRESH) {
@@ -56,7 +70,6 @@ class PokemonRemoteMediator (
             MediatorResult.Success(
                 endOfPaginationReached = pokemons.isEmpty()
             )
-
 
         } catch(e: IOException) {
             MediatorResult.Error(e)
