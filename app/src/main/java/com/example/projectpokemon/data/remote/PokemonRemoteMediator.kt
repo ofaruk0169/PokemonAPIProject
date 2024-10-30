@@ -24,8 +24,8 @@ class PokemonRemoteMediator (
     ): MediatorResult {
 
         return try {
-            val loadKey = when(loadType) {
-                LoadType.REFRESH -> 1
+            val offset = when(loadType) {
+                LoadType.REFRESH -> 0
                 LoadType.PREPEND -> return MediatorResult.Success(
                     endOfPaginationReached = true
                 )
@@ -36,26 +36,40 @@ class PokemonRemoteMediator (
                     } else {
                         (lastItem.id / state.config.pageSize) + 1
                     }
-                }
+                } //calculate offset based on current state
             }
 
-            delay(2000L)
-            val pokemons = pokemonApi.getPokemons(
-                page = loadKey,
-                pageCount = state.config.pageSize
+            //fetch date from the API
+            val response = pokemonApi.getPokemons(
+                offset,
+                state.config.pageSize
             )
+
+
+            // Map results to PokemonEntity using your existing toPokemonEntity function
+            val pokemonEntities = response.results.map { result ->
+                // Here, you need to fetch the Pokémon details to get full information, if required.
+                // For demonstration, I'm just extracting ID from URL. You might want to call another API here.
+                val id = result.url.substringAfterLast("/").toInt()
+                PokemonDto(id, result.name) // Create a PokemonDto or similar if necessary
+            }.map { dto ->
+                dto.toPokemonEntity() // Use the mapping function here
+            }
+
 
             pokemonDb.withTransaction {
                 if(loadType == LoadType.REFRESH) {
                     pokemonDb.dao.clearAll()
                 }
-                val pokemonEntities = pokemons.map { it.toPokemonEntity() }
                 pokemonDb.dao.upsertAll(pokemonEntities)
             }
 
+            /*
             MediatorResult.Success(
                 endOfPaginationReached = pokemons.isEmpty()
-            )
+            )*/
+
+            MediatorResult.Success(endOfPaginationReached = response.next == null)
 
 
         } catch(e: IOException) {
