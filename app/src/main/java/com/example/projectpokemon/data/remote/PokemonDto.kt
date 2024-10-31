@@ -6,8 +6,6 @@ data class PokemonDto(
     val abilities: String, //"description" in Phillip video
     val height: String, //"first_brewed" in Phillip video
     val spriteUrl: String?, //"image_url" in Phillip video
-
-
     val name: String,
     val url: String
 )

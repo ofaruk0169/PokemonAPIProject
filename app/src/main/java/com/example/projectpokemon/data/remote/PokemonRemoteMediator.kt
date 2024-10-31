@@ -45,13 +45,17 @@ class PokemonRemoteMediator (
                 state.config.pageSize
             )
 
-
-            // Map results to PokemonEntity using your existing toPokemonEntity function
             val pokemonEntities = response.results.map { result ->
-                // Here, you need to fetch the Pokémon details to get full information, if required.
-                // For demonstration, I'm just extracting ID from URL. You might want to call another API here.
                 val id = result.url.substringAfterLast("/").toInt()
-                PokemonDto(id, result.name) // Create a PokemonDto or similar if necessary
+                PokemonDto(
+                    id = id,
+                    name = result.name,
+                    types = "", // Placeholder or fetch types if needed
+                    abilities = "", // Placeholder or fetch abilities if needed
+                    height = "", // Placeholder or fetch height if needed
+                    spriteUrl = null,
+                    url = result.url// Placeholder or fetch spriteUrl if needed
+                )
             }.map { dto ->
                 dto.toPokemonEntity() // Use the mapping function here
             }
