@@ -1,15 +1,14 @@
 package com.example.projectpokemon.data.remote
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import coil.network.HttpException
 import com.example.projectpokemon.data.local.PokemonDatabase
 import com.example.projectpokemon.data.local.PokemonEntity
 import com.example.projectpokemon.data.mappers.toPokemonEntity
-import kotlinx.coroutines.delay
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
@@ -22,7 +21,6 @@ class PokemonRemoteMediator (
         loadType: LoadType,
         state: PagingState<Int, PokemonEntity>
     ): MediatorResult {
-
         return try {
             val offset = when(loadType) {
                 LoadType.REFRESH -> 0
@@ -31,55 +29,71 @@ class PokemonRemoteMediator (
                 )
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull()
-                    if(lastItem == null) {
-                        1
+                    if(lastItem == null) 1 else  (lastItem.id / state.config.pageSize) + 1
+                }
+            }
+
+            // Fetch data from the API
+            val response = pokemonApi.getPokemons(offset, state.config.pageSize)
+
+            val pokemonEntities = response.results.mapNotNull { result ->
+                // Fetch Pokémon ID from URL
+                val url = result.url
+                Log.d("Omare", "Processing Pokémon URL: $url")
+
+                // Check if URL is not blank and contains the expected segment "/pokemon/"
+                if (url.isNotBlank() && url.contains("/pokemon/")) {
+                    val idString = result.url.trimEnd('/').substringAfterLast("/")
+
+
+                    // Log the extracted ID string to debug
+                    Log.d("Omare", "Extracted ID: $idString")
+
+                    if (idString.isNotBlank()) {
+                        val id = idString.toIntOrNull()
+                        if (id == null) {
+                            Log.e("PokemonRemoteMediator", "Invalid ID format, skipping Pokémon: $url")
+                            return@mapNotNull null  // Skip if ID cannot be parsed
+                        }
+                        // Proceed with the valid ID
+                        Log.d("PokemonRemoteMediator", "Successfully extracted ID: $id")
+
+                        // Fetch detailed data for each Pokémon with error handling
+                        val detailsResponse = try {
+                            pokemonApi.getPokemonDetails(id)  // Attempt to fetch Pokémon details
+                        } catch (e: Exception) {
+                            Log.e("PokemonRemoteMediator", "Failed to fetch details for Pokémon ID: $id", e)
+                            return@mapNotNull null  // Skip this Pokémon if fetching details fails
+                        }
+
+                        // Convert details to PokemonEntity
+                        detailsResponse.toPokemonEntity()
+
                     } else {
-                        (lastItem.id / state.config.pageSize) + 1
+                        Log.e("PokemonRemoteMediator", "Extracted ID is blank, skipping Pokémon: $url")
+                        return@mapNotNull null  // Skip if ID is blank
                     }
-                } //calculate offset based on current state
+                } else {
+                    Log.e("PokemonRemoteMediator", "URL format is invalid, skipping Pokémon: $url")
+                    return@mapNotNull null  // Skip if URL is not in the expected format
+                }
             }
 
-            //fetch date from the API
-            val response = pokemonApi.getPokemons(
-                offset,
-                state.config.pageSize
-            )
-
-            val pokemonEntities = response.results.map { result ->
-                val id = result.url.substringAfterLast("/").toInt()
-                PokemonDto(
-                    id = id,
-                    name = result.name,
-                    types = "", // Placeholder or fetch types if needed
-                    abilities = "", // Placeholder or fetch abilities if needed
-                    height = "", // Placeholder or fetch height if needed
-                    spriteUrl = null,
-                    url = result.url// Placeholder or fetch spriteUrl if needed
-                )
-            }.map { dto ->
-                dto.toPokemonEntity() // Use the mapping function here
-            }
-
-
+            // Save data in the database
             pokemonDb.withTransaction {
                 if(loadType == LoadType.REFRESH) {
-                    pokemonDb.dao.clearAll()
+                    pokemonDb.dao.clearAll()  // Clear all entries if refreshing
                 }
-                pokemonDb.dao.upsertAll(pokemonEntities)
+                pokemonDb.dao.upsertAll(pokemonEntities)  // Insert or update the list of Pokémon entities
             }
 
-            /*
-            MediatorResult.Success(
-                endOfPaginationReached = pokemons.isEmpty()
-            )*/
-
+            // Return success with pagination status
             MediatorResult.Success(endOfPaginationReached = response.next == null)
 
-
         } catch(e: IOException) {
-            MediatorResult.Error(e)
+            MediatorResult.Error(e)  // Handle network-related errors
         } catch(e: retrofit2.HttpException) {
-            MediatorResult.Error(e)
+            MediatorResult.Error(e)  // Handle HTTP errors
         }
     }
 }
