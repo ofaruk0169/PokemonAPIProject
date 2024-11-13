@@ -12,15 +12,10 @@ interface PokemonApi {
         @Query("limit") limit: Int = 20
     ): PokemonResponse
 
-
-
-
     @GET("pokemon/{id}")
     suspend fun getPokemonDetails(
         @Path("id") id: Int,
     ): PokemonDetailsDto
-
-
 
     companion object {
         const val BASE_URL = "https://pokeapi.co/api/v2/"

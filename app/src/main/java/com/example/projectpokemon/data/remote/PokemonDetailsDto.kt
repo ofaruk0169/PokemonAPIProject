@@ -28,5 +28,5 @@ data class TypeInfoDto(
 )
 
 data class SpriteDto(
-    @Json(name = "front_default") val frontDefault: String?
+    /*@Json(name = "front_default") */val frontDefault: String?
 )
