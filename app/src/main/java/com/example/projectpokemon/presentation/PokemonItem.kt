@@ -1,5 +1,6 @@
 package com.example.projectpokemon.presentation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -44,6 +45,7 @@ fun PokemonItem(
         ) {
             AsyncImage(
                 model = pokemon.spriteUrl,
+                //model = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
                 contentDescription = pokemon.name,
                 modifier = Modifier
                     .weight(1f)
@@ -74,18 +76,14 @@ fun PokemonItem(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = pokemon.height,
+                    text = "${pokemon.height ?: "Unknown height"} cm",
                     modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.End,
+                    //textAlign = TextAlign.End,
                     fontSize = 8.sp
                 )
             }
         }
     }
-
-
-
-
 }
 
 @Preview

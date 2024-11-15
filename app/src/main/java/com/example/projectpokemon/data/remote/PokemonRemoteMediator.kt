@@ -29,7 +29,6 @@ class PokemonRemoteMediator (
                 )
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull()
-                    /*if(lastItem == null) 1 else  (lastItem.id / state.config.pageSize) + 1*/
                     lastItem?.id ?: 1
                 }
             }
@@ -67,8 +66,14 @@ class PokemonRemoteMediator (
                             return@mapNotNull null  // Skip this Pokémon if fetching details fails
                         }
 
+                        Log.d("Bored", "Details Response for ID $id: ${detailsResponse.toString()}")
+                        Log.d("PokemonRemoteMediator", "Pokemon sprite URL: ${detailsResponse.sprites.front_default}")
+
+
+
                         // Convert details to PokemonEntity
                         detailsResponse.toPokemonEntity()
+
 
                     } else {
                         Log.e("PokemonRemoteMediator", "Extracted ID is blank, skipping Pokémon: $url")

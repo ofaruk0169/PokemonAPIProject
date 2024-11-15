@@ -1,14 +1,12 @@
 package com.example.projectpokemon.data.remote
 
-import com.squareup.moshi.Json
-
 data class PokemonDetailsDto(
     val id: Int,
     val name: String,
     val height: Int,
     val abilities: List<AbilityDto>,
     val types: List<TypeDto>,
-    @Json(name = "sprites") val sprite: SpriteDto
+    val sprites: SpriteDto
 )
 
 data class AbilityDto(
@@ -28,5 +26,5 @@ data class TypeInfoDto(
 )
 
 data class SpriteDto(
-    /*@Json(name = "front_default") */val frontDefault: String?
+    val front_default: String?
 )

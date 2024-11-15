@@ -13,7 +13,7 @@ data class SpriteDto(
 fun PokemonDetailsDto.toPokemonEntity(): PokemonEntity {
 
     // Safely handle null values for sprites
-    val frontSprite = sprite?.frontDefault ?: "default_sprite_url"  // Provide fallback if sprite is null
+    val frontSprite = sprites?.front_default ?: "default_sprite_url"  // Provide fallback if sprite is null
 
     return PokemonEntity(
         id = id,
@@ -22,6 +22,7 @@ fun PokemonDetailsDto.toPokemonEntity(): PokemonEntity {
         abilities = abilities.joinToString { it.ability.name }, // Convert abilities list to comma-separated string
         height = "$height",  // Convert height to string format
         spriteUrl = frontSprite // Use the frontSprite variable with the fallback value
+
     )
 }
 
