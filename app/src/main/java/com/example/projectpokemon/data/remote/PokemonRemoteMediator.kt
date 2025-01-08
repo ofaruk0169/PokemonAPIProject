@@ -16,7 +16,6 @@ class PokemonRemoteMediator (
     private val pokemonDb: PokemonDatabase,
     private val pokemonApi: PokemonApi
 ): RemoteMediator<Int, PokemonEntity>() {
-
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, PokemonEntity>
