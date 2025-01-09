@@ -45,7 +45,6 @@ fun PokemonItem(
         ) {
             AsyncImage(
                 model = pokemon.spriteUrl,
-                //model = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
                 contentDescription = pokemon.name,
                 modifier = Modifier
                     .weight(1f)
