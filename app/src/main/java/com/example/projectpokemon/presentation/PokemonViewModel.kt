@@ -15,7 +15,6 @@ import javax.inject.Inject
 class PokemonViewModel @Inject constructor(
     pager: Pager<Int, PokemonEntity>
 ): ViewModel() {
-
     val pokemonPagingFlow = pager
         .flow
         .map { pagingData ->
