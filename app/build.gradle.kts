@@ -55,7 +55,7 @@ android {
 
 dependencies {
 
-    // do something here implementation 'androidx.multidex:multidex:2.0.1'
+    // implementation 'androidx.multidex:multidex:2.0.1'
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -81,12 +81,34 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:$hiltVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-// For instrumentation tests
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-    kspAndroidTest("com.google.dagger:hilt-compiler:$hiltVersion")
-// For local unit tests
+    // For local unit tests
     testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
     kspTest("com.google.dagger:hilt-compiler:$hiltVersion")
+
+    //converting local unit tests from the video
+    testImplementation("androidx.test:core:1.4.0")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+    testImplementation("com.google.truth:truth:1.1.3")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.1")
+    testImplementation("io.mockk:mockk:1.10.5")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.1.0-alpha04")
+
+    // For instrumentation tests
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
+    kspAndroidTest("com.google.dagger:hilt-compiler:$hiltVersion")
+
+    //converting Instrumentation tests from the video
+    androidTestImplementation("junit:junit:4.13.2")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
+    androidTestImplementation("com.google.truth:truth:1.1.3")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test:core-ktx:1.6.1")
+    androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.9.1")
+    androidTestImplementation("io.mockk:mockk-android:1.10.5")
+    androidTestImplementation("androidx.test:runner:1.6.2")
 
     //Coil Compose
     implementation("io.coil-kt:coil-compose:2.7.0")
