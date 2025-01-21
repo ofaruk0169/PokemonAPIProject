@@ -7,7 +7,6 @@ import androidx.room.Upsert
 
 @Dao
 interface PokemonDao {
-
     @Upsert
     suspend fun upsertAll(pokemons: List<PokemonEntity>)
 
