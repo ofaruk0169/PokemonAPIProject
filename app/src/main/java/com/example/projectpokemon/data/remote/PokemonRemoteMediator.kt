@@ -69,7 +69,6 @@ class PokemonRemoteMediator (
                         Log.d("PokemonRemoteMediator", "Pokemon sprite URL: ${detailsResponse.sprites.front_default}")
 
 
-
                         // Convert details to PokemonEntity
                         detailsResponse.toPokemonEntity()
 
