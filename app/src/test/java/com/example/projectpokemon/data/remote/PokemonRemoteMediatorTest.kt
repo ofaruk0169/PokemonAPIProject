@@ -9,7 +9,7 @@ class PokemonRemoteMediatorTest {
 
     @Before
     fun setUp() {
-        pokemonRemoteMediator = PokemonRemoteMediator(
+  /*      pokemonRemoteMediator = PokemonRemoteMediator(
 
             //create a fake repositiory for the database.
             //simulates actual behaviour of our repository, we can then use it for our test case.
@@ -17,6 +17,6 @@ class PokemonRemoteMediatorTest {
             //The use case (which this project doesn't have) doesn't care where this data comes from (modify this point for this project) - just needs to know which data it gets
 
 
-        )
+        )*/
     }
 }
