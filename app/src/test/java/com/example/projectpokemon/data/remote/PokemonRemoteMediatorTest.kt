@@ -7,11 +7,16 @@ import org.junit.Before
 class PokemonRemoteMediatorTest {
     private lateinit var pokemonRemoteMediator: PokemonRemoteMediator
 
-/*    @Before
+    @Before
     fun setUp() {
         pokemonRemoteMediator = PokemonRemoteMediator(
-            //here we need to pass both the database and the API, did a litttle bit here so that's a start.
+
+            //create a fake repositiory for the database.
+            //simulates actual behaviour of our repository, we can then use it for our test case.
+            //under the hood just uses a simple list. We really only save our whole database in a simple list. T
+            //The use case (which this project doesn't have) doesn't care where this data comes from (modify this point for this project) - just needs to know which data it gets
+
 
         )
-    }*/
+    }
 }
