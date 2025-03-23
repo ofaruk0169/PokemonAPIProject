@@ -11,7 +11,7 @@ class FakeDatabaseRepository/*(
     suspend fun clearDatabase() {
         fakePokemonDao.clearAll()
     }
-
+this is nothing
     suspend fun insertPokemons(pokemons: List<PokemonEntity>) {
         fakePokemonDao.upsertAll(pokemons)
     }
